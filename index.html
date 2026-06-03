@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>徐文奇 - AI课程研发</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #d9e1e8;
+      --paper: #ffffff;
+      --mist: #f5f7f9;
+      --blue: #17456b;
+      --teal: #0f766e;
+      --amber: #b7791f;
+      --rose: #b42318;
+      --shadow: 0 18px 42px rgba(31, 41, 55, 0.08);
+      --max: 1120px;
+      --radius: 8px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--mist);
+    }
+
+    body {
+      color: var(--ink);
+      font-family: var(--font);
+      line-height: 1.75;
+      background:
+        linear-gradient(180deg, #f7fafc 0%, #eef3f5 42%, #f8faf9 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(217, 225, 232, 0.86);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      height: 58px;
+      margin: 0 auto;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      font-weight: 800;
+      color: var(--blue);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue);
+      background: #eef5f8;
+    }
+
+    .hero {
+      min-height: calc(100vh - 58px);
+      padding: 86px 22px 42px;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(76, 54, 139, 0.92), rgba(116, 90, 181, 0.86)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'%3E%3Cdefs%3E%3Cpattern id='grid' width='48' height='48' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 48 0 L 0 0 0 48' fill='none' stroke='%23ffffff' stroke-width='1' opacity='.15'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='1400' height='900' fill='%23816bc7'/%3E%3Crect width='1400' height='900' fill='url(%23grid)'/%3E%3Cpath d='M930 95c148 31 275 154 308 302 34 149-60 345-210 398-151 53-360-12-455-130-96-119-87-292 0-410 86-119 280-191 457-160z' fill='%23b9a8ef' opacity='.36'/%3E%3Cpath d='M94 592c90-89 226-120 353-85 127 36 250 136 254 244 5 108-110 214-251 221-141 8-307-82-393-190-86-109-47-93 37-190z' fill='%23f2d6ff' opacity='.22'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-inner {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(310px, 0.88fr);
+      gap: 42px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin-bottom: 14px;
+      color: #c7eee8;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 720px;
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.02;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .hero-title {
+      margin-top: 18px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: clamp(17px, 2vw, 22px);
+    }
+
+    .motto {
+      margin-top: 26px;
+      padding-left: 16px;
+      border-left: 4px solid #f2c36b;
+      color: #ffe0a5;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.44);
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .button.primary {
+      border-color: #f2c36b;
+      background: #f2c36b;
+      color: #1d344c;
+    }
+
+    .button.portfolio {
+      border-color: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.92);
+      color: #4c368b;
+    }
+
+    .button.portfolio:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .profile-panel {
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 60px rgba(10, 30, 48, 0.22);
+    }
+
+    .avatar {
+      width: 118px;
+      height: 118px;
+      margin-bottom: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.36);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(24, 17, 55, 0.22);
+    }
+
+    .avatar img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 38%;
+    }
+
+    .profile-list {
+      display: grid;
+      gap: 13px;
+      list-style: none;
+    }
+
+    .profile-list li {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 14px;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 15px;
+    }
+
+    .profile-list span:first-child {
+      color: #b9e8e2;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: 76px 22px;
+    }
+
+    .section.alt {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.38fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: var(--blue);
+      font-size: 28px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .metric {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--teal);
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .about {
+      padding: 28px;
+      border-left: 5px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .about p + p {
+      margin-top: 12px;
+    }
+
+    .ai-focus {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .ai-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .ai-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .ai-card span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+    }
+
+    .job {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 24px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .date {
+      color: var(--amber);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .company {
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .role {
+      margin-top: 4px;
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .job ul {
+      margin-top: 16px;
+      display: grid;
+      gap: 9px;
+      list-style: none;
+    }
+
+    .job li {
+      position: relative;
+      padding-left: 18px;
+      color: #344054;
+    }
+
+    .job li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 13px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: #344054;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .block {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .block h3 {
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 18px;
+    }
+
+    .plain-list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      color: #344054;
+    }
+
+    .education-main {
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .school {
+      color: var(--blue);
+      font-size: 23px;
+      font-weight: 850;
+    }
+
+    .major {
+      color: var(--muted);
+    }
+
+    .campus {
+      display: grid;
+      gap: 14px;
+    }
+
+    .campus-row {
+      padding: 22px 24px;
+      border-left: 4px solid var(--amber);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .campus-row h3 {
+      margin-bottom: 6px;
+      color: var(--blue);
+      font-size: 17px;
+    }
+
+    .footer {
+      padding: 52px 22px;
+      color: rgba(255, 255, 255, 0.86);
+      background: #173a59;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer h2 {
+      color: #fff;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .contact-links a {
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 6px;
+      color: #ffe0a5;
+      font-weight: 700;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 850px) {
+      .hero {
+        min-height: auto;
+        padding-top: 58px;
+      }
+
+      .hero-inner,
+      .section-head,
+      .job,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-focus {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .profile-panel {
+        max-width: 520px;
+      }
+
+      .nav-inner {
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links {
+        display: none;
+      }
+
+      .section {
+        padding: 56px 16px;
+      }
+
+      .hero {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .profile-list li {
+        grid-template-columns: 64px minmax(0, 1fr);
+      }
+
+      .job,
+      .block,
+      .about {
+        padding: 20px;
+      }
+
+      .ai-focus {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top">徐文奇</a>
+      <ul class="nav-links">
+        <li><a href="#about">简介</a></li>
+        <li><a href="#experience">经历</a></li>
+        <li><a href="#education">教育</a></li>
+        <li><a href="#skills">能力</a></li>
+        <li><a href="#campus">校园</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">求职方向：AI课程研发 / AI教育产品设计</p>
+        <h1>徐文奇</h1>
+        <p class="hero-title">具备 AI 课程从0到1研发经验，能将AI工具、机器人硬件与研学场景转化为可交付、可复制、可销售的青少年课程产品。</p>
+        <p class="motto">临渊羡鱼，不如退而结网。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#experience">查看工作经历</a>
+          <a class="button portfolio" href="https://my.feishu.cn/docx/ElvKdkpQMo1mSPxLXP0cTchOnkf?from=from_copylink" target="_blank" rel="noopener">AI课程作品集</a>
+          <a class="button portfolio" href="https://my.feishu.cn/docx/AfBmdZG0HohlvfxKDnCccOcnnmf?from=from_copylink" target="_blank" rel="noopener">AI使用经验</a>
+          <a class="button" href="mailto:xwq430@qq.com">邮件联系</a>
+        </div>
+      </div>
+
+      <aside class="profile-panel" aria-label="基础信息">
+        <div class="avatar">
+          <img src="nj-0829-55_22032.jpg" alt="徐文奇证件照">
+        </div>
+        <ul class="profile-list">
+          <li><span>生日</span><span>1995.04.30</span></li>
+          <li><span>户籍</span><span>浙江衢州</span></li>
+          <li><span>电话</span><span><a href="tel:15372483513">15372483513</a></span></li>
+          <li><span>邮箱</span><span><a href="mailto:xwq430@qq.com">xwq430@qq.com</a></span></li>
+          <li><span>定位</span><span>AI课程研发 / 青少年AI研学产品设计</span></li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="about">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2>个人简介</h2>
+          <p class="section-note">目标岗位：AI课程研发。核心优势是“懂AI工具、懂教学转化、懂产品落地”。</p>
+        </div>
+        <div class="about fade-in">
+          <p>具备 5 年+编程教育与教学管理经验，熟悉课程交付、讲师培养、跨部门协同和教学数据改善。近阶段重点投入 AI 课程研发，能把 AI 工具、硬件实操和研学场景整合成完整课程产品。</p>
+          <p>AI能力更偏“实际使用 + 教学转化”：深度使用 Claude Code、Cursor、扣子、豆包、通义千问、DeepSeek、文心一言等工具，能完成课程大纲、讲稿、课件、销售材料、成本核算和互动教学应用的全流程产出。</p>
+        </div>
+        <div class="ai-focus fade-in">
+          <div class="ai-card"><strong>AI工具广度</strong><span>覆盖7类、15+款AI产品，包含编程、智能体、生图、视频、音频、3D与教育编程工具。</span></div>
+          <div class="ai-card"><strong>智能体搭建</strong><span>使用扣子制作AI伴学助手、营养师、脸谱游戏，并接入豆包与飞书工作流。</span></div>
+          <div class="ai-card"><strong>AI辅助开发</strong><span>用Claude Code、Cursor、Bolt.new完成网页、小工具和课程材料自动化产出。</span></div>
+          <div class="ai-card"><strong>教学转化</strong><span>把提示词、AI生图、多工具对比、智能体搭建转成青少年可上手的课堂任务。</span></div>
+        </div>
+        <div class="summary fade-in">
+          <div class="metric"><strong>15+</strong><span>AI课程/产品方案研发</span></div>
+          <div class="metric"><strong>50+</strong><span>课程文档、课件、讲稿与销售材料</span></div>
+          <div class="metric"><strong>10+</strong><span>AI工具融入课堂教学场景</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="experience">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2>工作经历</h2>
+          <p class="section-note">经历一线授课、教学管理、课程研发与AI教育产品设计，能够把教学内容、产品定位和商业落地连接起来。</p>
+        </div>
+
+        <div class="timeline">
+          <article class="job fade-in">
+            <div class="date">2026.03 - 至今</div>
+            <div>
+              <div class="company">AI课程研发与教育产品设计</div>
+              <div class="role">AI课程研发方向作品集 / 研学、标课、暑期营、场馆课</div>
+              <ul>
+                <li>3个月完成 15+ 个AI课程/产品方案，覆盖一日研学、半日标课、暑期营、45分钟场馆课等 4 条产品线。</li>
+                <li>独立产出 50+ 份材料：课程大纲、详细教案、PPT课件、讲稿、销售材料、推文包装与成本核算。</li>
+                <li>设计 AI+非遗、AI+自然探索、AI+机器人、AI+3D投影、AI+具身智能等跨学科课程，突出实操闭环与成果展示。</li>
+                <li>将 10+ 款AI工具转化为课堂任务，包含扣子智能体搭建、AI生图、提示词工程、多模型对比、ml2scratch机器学习、Tinkercad 3D建模等。</li>
+                <li>完成宇树机器人R1三大主题共 45 次课方案，具备课程矩阵规划、标准化交付和产品商业测算能力。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job fade-in">
+            <div class="date">2020.04 - 2025.06</div>
+            <div>
+              <div class="company">杭州小码教育科技有限公司</div>
+              <div class="role">讲师 - 小组长 - 直播 Python 教学主管 - 教学赋能经理</div>
+              <ul>
+                <li>作为首位直播讲师，入职第三日即授正式课，通过新讲师考核、直播讲师考核评级 A 级、初级讲师考核，并获“十佳讲师”“优秀员工”等称号。</li>
+                <li>担任小组长期间负责 6 人团队管理与带教，完成基层管理者培训，通过“储备教学主管”培训考核。</li>
+                <li>担任直播 Python 教学主管期间，团队续费率由 68.29% 提升至 81.43%，退费率由 1.02% 降至 0.15%，团队人数最高 24 人。</li>
+                <li>担任教学赋能经理期间，对接西安、成都、武汉教学后端，校区数量由 4 家增长为 6 家，协助教学教务团队搭建维稳和人才培养。</li>
+                <li>负责全国教学团队讲师岗级考核，参与全国教学工作稽核；独立统筹“水滴石穿”讲师培养项目、授课大赛和精英师训，参与 38 人，周期 3 个月。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job fade-in">
+            <div class="date">2018.03 - 2020.01</div>
+            <div>
+              <div class="company">杭州乐慧教育科技有限公司（乐博乐博）</div>
+              <div class="role">Python 教师</div>
+              <ul>
+                <li>公司首位女性教师，独立完成信奥赛 C++ 一期课程研发。</li>
+                <li>负责中小学机器人、单片机、积木、Python 与 C++ 编程课程教学。</li>
+                <li>参与中小学机器人科技比赛培训，覆盖 VEX、超级轨迹赛等软硬件结合项目。</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job fade-in">
+            <div class="date">2017.07 - 2017.10</div>
+            <div>
+              <div class="company">北京华如科技（南京分公司）</div>
+              <div class="role">测试工程师（C++）</div>
+              <ul>
+                <li>公司产品面向军工模拟战场领域，学习 C++、QT 和产品底层模型。</li>
+                <li>针对客户项目制作样例，参与实际项目开发测试。</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2>教育背景</h2>
+          <p class="section-note">电子信息专业背景，兼具软硬件基础、编程能力和教育行业实践经验。</p>
+        </div>
+        <div class="two-col">
+          <div class="block fade-in">
+            <div class="education-main">
+              <div class="school">南京农业大学</div>
+              <div class="major">211 工程 / 电子信息科学与技术 / 2017 届本科毕业生</div>
+            </div>
+            <h3>主修课程</h3>
+            <div class="pill-grid">
+              <span class="pill">单片机</span>
+              <span class="pill">嵌入式</span>
+              <span class="pill">模电</span>
+              <span class="pill">数电</span>
+              <span class="pill">电路</span>
+              <span class="pill">电磁场</span>
+              <span class="pill">微波</span>
+              <span class="pill">C 语言</span>
+              <span class="pill">VC++</span>
+              <span class="pill">数字信号处理</span>
+              <span class="pill">通信原理</span>
+              <span class="pill">传感器</span>
+              <span class="pill">数据库</span>
+            </div>
+          </div>
+
+          <div class="block fade-in" id="skills">
+            <h3>AI课程研发能力</h3>
+            <ul class="plain-list">
+              <li>课程产品化：大纲、教案、讲稿、PPT、销售材料、成本核算全链路产出</li>
+              <li>AI工具教学化：将扣子、豆包、DeepSeek、通义千问等工具转成课堂实操任务</li>
+              <li>软硬结合：机器人、灵巧手、无人机、3D打印、Tinkercad、OpenCV等内容整合</li>
+              <li>标准化交付：课程配套讲稿、素材包、步骤图和讲师可复制执行方案</li>
+            </ul>
+            <div class="pill-grid" style="margin-top: 18px;">
+              <span class="pill">AI课程研发</span>
+              <span class="pill">青少年AI研学</span>
+              <span class="pill">智能体搭建</span>
+              <span class="pill">提示词工程</span>
+              <span class="pill">AI辅助开发</span>
+              <span class="pill">机器人课程</span>
+              <span class="pill">产品线规划</span>
+              <span class="pill">成本核算</span>
+              <span class="pill">标准化课包</span>
+            </div>
+            <h3 style="margin-top: 24px;">资格证书</h3>
+            <div class="pill-grid">
+              <span class="pill">英语 CET4 / CET6</span>
+              <span class="pill">普通话二级甲等</span>
+              <span class="pill">计算机二级 C</span>
+              <span class="pill">计算机三级网络技术</span>
+              <span class="pill">计算机四级网络工程师</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="campus">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2>校园经历</h2>
+          <p class="section-note">在学生组织、志愿支教和竞赛活动中积累组织协调、公共事务推进与团队合作经验。</p>
+        </div>
+        <div class="campus">
+          <div class="campus-row fade-in">
+            <h3>学生组织</h3>
+            <p>加入电气系团委，历任组织部干事、组织部部长、电气系团委常委。</p>
+          </div>
+          <div class="campus-row fade-in">
+            <h3>志愿与支教</h3>
+            <p>参加“报纸义卖”“福利院看望老人”等志愿活动；加入微光计划支教团队，于四川省理塘县完成为期一月的支教计划。</p>
+          </div>
+          <div class="campus-row fade-in">
+            <h3>荣誉奖项</h3>
+            <p>获南京农业大学工学院“优秀共青团员”“优秀学生干部”“交通科技大赛三等奖”，南京农业大学“优秀共青团干部”“单科优秀奖”。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+      <div>
+        <h2>联系我</h2>
+        <p>求职方向：AI课程研发 / AI教育产品设计。</p>
+      </div>
+      <div class="contact-links">
+        <a href="tel:15372483513">15372483513</a>
+        <a href="mailto:xwq430@qq.com">xwq430@qq.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var items = document.querySelectorAll(".fade-in");
+      if (!("IntersectionObserver" in window)) {
+        items.forEach(function (item) { item.classList.add("visible"); });
+        return;
+      }
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16 });
+      items.forEach(function (item) { observer.observe(item); });
+    })();
+  </script>
+</body>
+</html>
